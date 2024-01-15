@@ -1,0 +1,28 @@
+version: "3"
+services:
+  webui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - DEBIAN_USER=${DEBIAN_USER}
+        - USER_ID=${USER_ID}
+        - GROUP_ID=${GROUP_ID}
+    working_dir: /app
+    command: bash webui.sh
+    volumes:
+      - ../webui:/app
+      - ../.cache:/home/${DEBIAN_USER}/.cache
+    ports:
+      - 7860:7860
+    environment:
+      - PYTHONUNBUFFERED=1
+      - COMMANDLINE_ARGS=--xformers --listen
+      - DISABLE_TELEMETRY=YES
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
