@@ -1,6 +1,7 @@
 FROM debian:12-slim
+# FROM nvidia/cuda:12.3.1-runtime-ubuntu20.04
 
-ARG DEBIAN_USER
+ARG USER_NAME
 ARG USER_ID
 ARG GROUP_ID
 
@@ -16,8 +17,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd -g ${GROUP_ID} ai && \
-    useradd ${DEBIAN_USER} -u ${USER_ID} -g ${GROUP_ID} -ms /bin/bash
+    useradd ${USER_NAME} -u ${USER_ID} -g ${GROUP_ID} -ms /bin/bash
 
-USER ${DEBIAN_USER}
+USER ${USER_NAME}
 
 RUN mkdir ~/.cache
