@@ -1,23 +1,21 @@
-version: "3"
 services:
   webui:
     build:
       context: .
       dockerfile: Dockerfile
       args:
-        - USER_NAME=${USER_NAME}
-        - USER_ID=${USER_ID}
-        - GROUP_ID=${GROUP_ID}
+        - USER_ID=${USER_ID:?}
+        - GROUP_ID=${GROUP_ID:?}
     working_dir: /app
     command: bash webui.sh
     volumes:
       - ../webui:/app
-      - ../.cache:/home/${USER_NAME}/.cache
+      - ../.cache:/home/ai-user/.cache
     ports:
       - 7860:7860
     environment:
       - PYTHONUNBUFFERED=1
-      - COMMANDLINE_ARGS=--xformers --listen
+      - COMMANDLINE_ARGS=${COMMANDLINE_ARGS:?}
       - DISABLE_TELEMETRY=YES
     deploy:
       resources:
